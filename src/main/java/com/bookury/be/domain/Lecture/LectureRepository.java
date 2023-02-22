@@ -7,7 +7,5 @@ import java.util.List;
 
 public interface LectureRepository extends JpaRepository<Lecture, Long> {
 
-    List<Lecture> findAllByStarttimeGreaterThan(LocalDateTime starttime);
-
     List<Lecture> findAllByStarttimeGreaterThanAndStarttimeLessThan(LocalDateTime now, LocalDateTime starttime);
 }

@@ -1,7 +1,10 @@
 package com.bookury.be.api;
 
 
+import com.bookury.be.api.dto.ApplyRequestDto;
 import com.bookury.be.api.dto.LectureGiveRequestDto;
+import com.bookury.be.domain.Apply.Apply;
+import com.bookury.be.domain.Apply.ApplyRepository;
 import com.bookury.be.domain.Lecture.Lecture;
 import com.bookury.be.domain.Lecture.LectureRepository;
 import com.bookury.be.service.LectureService;
@@ -27,6 +30,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Scanner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -43,6 +47,9 @@ public class LectureControllerTest {
 
     @Autowired
     LectureRepository lectureRepository;
+
+    @Autowired
+    ApplyRepository applyRepository;
 
     @LocalServerPort
     private int port;
@@ -104,5 +111,27 @@ public class LectureControllerTest {
         //then
         String content = result.getResponse().getContentAsString();
         System.out.println(content);
+    }
+
+    @Test
+    public void 강의_신청() throws Exception {
+        // given
+        Long lectureId = Long.valueOf(52);
+        String employee_number = "123123";
+
+        ApplyRequestDto applyRequestDto = ApplyRequestDto.builder()
+                .employee_number(employee_number)
+                .build();
+
+        String url = "http://localhost:" + port + "/api/v1/lectures/" + lectureId + "/apply";
+
+        //when
+        mvc.perform(post(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(applyRequestDto)))
+                .andExpect(status().isOk());
+
+        //then
+        List<Apply> all = applyRepository.findAll();
     }
 }
