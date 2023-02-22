@@ -19,13 +19,17 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -54,15 +58,14 @@ public class LectureControllerTest {
     private MockMvc mvc;
 
 
-
     @Test
     public void 강의_열기() throws Exception {
         // given
-        String speacker = "오상택";
-        String place = "롯데홀";
+        String speacker = "OST";
+        String place = "LOTTE HALL";
         Integer capacity = 10;
         LocalDateTime starttime = LocalDateTime.now();
-        String content = "안녕하세요 오상택입니다";
+        String content = "Hello I am OST2";
 
 
         LectureGiveRequestDto lectureGiveRequestDto = LectureGiveRequestDto.builder()
@@ -86,5 +89,20 @@ public class LectureControllerTest {
         assertThat(all.get(0).getSpeaker()).isEqualTo(speacker);
         assertThat(all.get(0).getContent()).isEqualTo(content);
 
+    }
+
+
+    @Test
+    public void 강의_목록() throws Exception {
+        // given
+        String url = "http://localhost:" + port + "/api/v1/lectures";
+
+        //when
+        MvcResult result = mvc.perform(get(url))
+                .andExpect(status().isOk()).andReturn();
+
+        //then
+        String content = result.getResponse().getContentAsString();
+        System.out.println(content);
     }
 }

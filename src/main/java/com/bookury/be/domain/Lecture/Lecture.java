@@ -39,4 +39,16 @@ public class Lecture {
         this.starttime = starttime;
         this.content = content;
     }
+
+    @Override
+    public String toString() {
+        return "Lecture{" +
+                "id=" + id +
+                ", speaker='" + speaker + '\'' +
+                ", place='" + place + '\'' +
+                ", capacity=" + capacity +
+                ", starttime=" + starttime +
+                ", content='" + content + '\'' +
+                '}';
+    }
 }

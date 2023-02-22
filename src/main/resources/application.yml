@@ -7,7 +7,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
@@ -15,6 +15,10 @@ spring:
   h2:
     console:
       enabled: true
+
+  jackson:
+    serialization:
+      INDENT_OUTPUT: true
 
 logging:
   level:

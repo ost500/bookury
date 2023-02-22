@@ -1,6 +1,7 @@
 package com.bookury.be.repository;
 
 
+import com.bookury.be.api.dto.LectureResponseDto;
 import com.bookury.be.domain.Lecture.Lecture;
 import com.bookury.be.domain.Lecture.LectureRepository;
 import org.junit.After;
@@ -13,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -22,11 +24,6 @@ public class LectureRepositoryTest {
 
     @Autowired
     LectureRepository lectureRepository;
-
-    @After
-    public void cleanup() {
-        lectureRepository.deleteAll();
-    }
 
     @Test
     public void 강의저장_불러오기() {
@@ -51,5 +48,17 @@ public class LectureRepositoryTest {
         // then
         Lecture lectures = lectureList.get(0);
         assertThat(lectures.getSpeaker()).isEqualTo(speacker);
+    }
+
+
+    @Test
+    public void 강의목록() {
+        // given
+
+        // when
+        List<Lecture> lectureList = lectureRepository.findAllByStarttimeGreaterThanAndStarttimeLessThan(LocalDateTime.now(), LocalDateTime.now().plusWeeks(1));
+
+        // then
+        lectureList.forEach((lecture -> System.out.println(lecture.toString())));
     }
 }
