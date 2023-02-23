@@ -1,9 +1,6 @@
 package com.bookury.be.api.controller;
 
-import com.bookury.be.api.dto.ApplyRequestDto;
-import com.bookury.be.api.dto.ApplyResponseDto;
-import com.bookury.be.api.dto.LectureGiveRequestDto;
-import com.bookury.be.api.dto.LectureResponseDto;
+import com.bookury.be.api.dto.*;
 import com.bookury.be.service.ApplyService;
 import com.bookury.be.service.LectureService;
 import lombok.RequiredArgsConstructor;
@@ -64,4 +61,9 @@ public class LectureController {
     }
 
     //실시간 인기 강연
+    // 강연 목록
+    @GetMapping("/api/v1/lectures/popular")
+    public List<LecturePopularResponseDto> popularLectures() {
+        return lectureService.popularLectures();
+    }
 }

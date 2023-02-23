@@ -1,10 +1,7 @@
 package com.bookury.be.api;
 
 
-import com.bookury.be.api.dto.ApplyRequestDto;
-import com.bookury.be.api.dto.ApplyResponseDto;
-import com.bookury.be.api.dto.LectureGiveRequestDto;
-import com.bookury.be.api.dto.LectureResponseDto;
+import com.bookury.be.api.dto.*;
 import com.bookury.be.domain.Apply.Apply;
 import com.bookury.be.domain.Apply.ApplyRepository;
 import com.bookury.be.domain.Lecture.Lecture;
@@ -163,8 +160,8 @@ public class LectureControllerTest {
     @Test
     public void 강의_신청() throws Exception {
         // given
-        Long lectureId = Long.valueOf(52);
-        String employee_number = "123123";
+        Long lectureId = Long.valueOf(102);
+        String employee_number = "12312335";
 
         ApplyRequestDto applyRequestDto = ApplyRequestDto.builder()
                 .employee_number(employee_number)
@@ -215,7 +212,7 @@ public class LectureControllerTest {
     public void 강의_수강_취소() throws Exception {
         // given
         Long lectureId = Long.valueOf(52);
-        String employee_number = "1231234";
+        String employee_number = "12312342";
 
         ApplyRequestDto applyRequestDto = ApplyRequestDto.builder()
                 .employee_number(employee_number)
@@ -239,4 +236,27 @@ public class LectureControllerTest {
         System.out.println(result.getResponse().getContentAsString());
     }
 
+    @Test
+    public void 실시간_인기_강연() throws Exception {
+        // given
+        String url = "http://localhost:" + port + "/api/v1/lectures/popular";
+
+        //when
+        MvcResult result = mvc.perform(get(url)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        //then
+        List<LecturePopularResponseDto> lectureResponseDtoList = lectureService.popularLectures();
+        Integer applyCount = JsonPath.read(result.getResponse().getContentAsString(), "$.[0].applyCount");
+        System.out.println(applyCount);
+        assertThat(lectureResponseDtoList.get(0).getApplyCount()).isEqualTo(applyCount.longValue());
+
+
+        for (int i = 0; i < lectureResponseDtoList.size(); i++) {
+            System.out.println(lectureResponseDtoList.get(i).toString());
+        }
+
+    }
 }
