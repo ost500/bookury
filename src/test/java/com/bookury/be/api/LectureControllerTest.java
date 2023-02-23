@@ -2,6 +2,7 @@ package com.bookury.be.api;
 
 
 import com.bookury.be.api.dto.ApplyRequestDto;
+import com.bookury.be.api.dto.ApplyResponseDto;
 import com.bookury.be.api.dto.LectureGiveRequestDto;
 import com.bookury.be.api.dto.LectureResponseDto;
 import com.bookury.be.domain.Apply.Apply;
@@ -138,6 +139,25 @@ public class LectureControllerTest {
         assertThat(lectureResponseDtoList.get(0).getSpeaker()).isEqualTo(speaker);
 
         System.out.println(content);
+    }
+
+    @Test
+    public void 강의_신청자_목록() throws Exception {
+        // given
+        Long lectureId = 52L;
+
+        String url = "http://localhost:" + port + "/api/v1/lectures/" + lectureId + "/applies";
+
+        //when
+        MvcResult result = mvc.perform(get(url)
+                .contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk()).andReturn();
+
+        //then
+        List<ApplyResponseDto> applyResponseDtos = applyService.appliesLecture(lectureId);
+
+        String employeeNum = JsonPath.read(result.getResponse().getContentAsString(), "$.[0].employee_number");
+        assertThat(applyResponseDtos.get(0).getEmployee_number()).isEqualTo(employeeNum);
+        System.out.println(result.getResponse().getContentAsString());
     }
 
     @Test

@@ -17,4 +17,7 @@ public interface ApplyRepository extends JpaRepository<Apply, Long> {
 
     @Query("select a from Apply a where a.employee_number = ?1")
     List<Apply> findByEmployee_number(String employee_number);
+
+    @Query("select a from Apply a where a.lecture = ?1")
+    List<Apply> findByLecture(Lecture lecture);
 }

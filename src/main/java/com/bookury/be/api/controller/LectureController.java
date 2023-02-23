@@ -1,6 +1,7 @@
 package com.bookury.be.api.controller;
 
 import com.bookury.be.api.dto.ApplyRequestDto;
+import com.bookury.be.api.dto.ApplyResponseDto;
 import com.bookury.be.api.dto.LectureGiveRequestDto;
 import com.bookury.be.api.dto.LectureResponseDto;
 import com.bookury.be.service.ApplyService;
@@ -24,9 +25,16 @@ public class LectureController {
         return lectureService.allLectures();
     }
 
+    // 강의 등록
     @PostMapping(value = "/api/v1/lectures/give")
     public Long GiveLecture(@RequestBody LectureGiveRequestDto requestDto) {
         return lectureService.giveLecture(requestDto);
+    }
+
+    // 강연신청자 목록
+    @GetMapping("/api/v1/lectures/{lectureId}/applies")
+    public List<ApplyResponseDto> appliesLecture(@PathVariable Long lectureId) {
+        return applyService.appliesLecture(lectureId);
     }
 
 
@@ -54,4 +62,6 @@ public class LectureController {
     public Long cancelLecture(@PathVariable Long lectureId, @RequestBody ApplyRequestDto requestDto) {
         return applyService.cancelApply(lectureId, requestDto);
     }
+
+    //실시간 인기 강연
 }

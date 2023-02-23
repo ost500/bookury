@@ -1,6 +1,7 @@
 package com.bookury.be.service;
 
 import com.bookury.be.api.dto.ApplyRequestDto;
+import com.bookury.be.api.dto.ApplyResponseDto;
 import com.bookury.be.api.dto.LectureResponseDto;
 import com.bookury.be.domain.Apply.Apply;
 import com.bookury.be.domain.Apply.ApplyRepository;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
@@ -67,6 +67,12 @@ public class ApplyService {
         return myApply.getId();
     }
 
+    @Transactional(readOnly = true)
+    public List<ApplyResponseDto> appliesLecture(Long lectureId) {
+        Lecture lecture = findLectureById(lectureId);
+
+        return applyRepository.findByLecture(lecture).stream().map(ApplyResponseDto::new).collect(Collectors.toList());
+    }
 
     private Lecture findLectureById(Long lectureId) {
 
