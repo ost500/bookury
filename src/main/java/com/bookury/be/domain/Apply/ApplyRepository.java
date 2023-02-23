@@ -20,4 +20,6 @@ public interface ApplyRepository extends JpaRepository<Apply, Long> {
 
     @Query("select a from Apply a where a.lecture = ?1")
     List<Apply> findByLecture(Lecture lecture);
+
+    Apply findTopByOrderByIdDesc();
 }

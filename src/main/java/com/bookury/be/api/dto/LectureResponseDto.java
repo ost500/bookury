@@ -26,4 +26,15 @@ public class LectureResponseDto {
         this.starttime = entity.getStarttime();
         this.content = entity.getContent();
     }
+
+    @Override
+    public String toString() {
+        return "LectureResponseDto{" +
+                "speaker='" + speaker + '\'' +
+                ", place='" + place + '\'' +
+                ", capacity=" + capacity +
+                ", starttime=" + starttime +
+                ", content='" + content + '\'' +
+                '}';
+    }
 }

@@ -13,7 +13,7 @@ import org.hibernate.annotations.ColumnDefault;
 public class Apply {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Apply_SEQ")
-    @SequenceGenerator(name = "Apply_SEQ")
+    @SequenceGenerator(name = "Apply_SEQ", allocationSize=1)
     @Column(name = "id", nullable = false)
     private Long id;
 
@@ -23,13 +23,11 @@ public class Apply {
 
     private String employee_number;
 
-    @Column(columnDefinition = "boolean default true")
     @ColumnDefault("true")
     private boolean is_valid;
 
     @Builder
-    public Apply(Long id, Lecture lecture, String employee_number) {
-        this.id = id;
+    public Apply(Lecture lecture, String employee_number) {
         this.lecture = lecture;
         this.employee_number = employee_number;
         this.is_valid = true;

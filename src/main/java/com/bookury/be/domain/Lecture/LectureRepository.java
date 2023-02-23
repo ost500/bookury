@@ -15,4 +15,6 @@ public interface LectureRepository extends JpaRepository<Lecture, Long> {
             "where l.starttime > ?1 and l.starttime < ?2 " +
             "group by l.id order by counta desc")
     List<Object[]> findAllWithApplyCount(LocalDateTime now, LocalDateTime starttime);
+
+    Lecture findTopByOrderByIdDesc();
 }
