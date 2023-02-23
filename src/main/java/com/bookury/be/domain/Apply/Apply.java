@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "apply")
 public class Apply {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "Apply_SEQ")
@@ -22,6 +21,9 @@ public class Apply {
     private Lecture lecture;
 
     private String employee_number;
+
+    @Column(columnDefinition = "boolean default 1")
+    private boolean is_valid;
 
     @Builder
     public Apply(Long id, Lecture lecture, String employee_number) {
@@ -37,5 +39,9 @@ public class Apply {
                 ", lecture=" + lecture +
                 ", employee_number='" + employee_number + '\'' +
                 '}';
+    }
+
+    public void cancel() {
+        this.is_valid = false;
     }
 }

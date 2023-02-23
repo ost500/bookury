@@ -33,6 +33,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -169,4 +170,34 @@ public class LectureControllerTest {
 
         System.out.println(speaker);
     }
+
+
+    @Test
+    public void 강의_수강_취소() throws Exception {
+        // given
+        Long lectureId = Long.valueOf(52);
+        String employee_number = "1231234";
+
+        ApplyRequestDto applyRequestDto = ApplyRequestDto.builder()
+                .employee_number(employee_number)
+                .build();
+
+        String url = "http://localhost:" + port + "/api/v1/lectures/" + lectureId + "/employeenumber/cancel";
+
+        //when
+        MvcResult result = mvc.perform(post(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().registerModule(new JavaTimeModule()).writeValueAsString(applyRequestDto)))
+                .andExpect(status().isOk()).andReturn();
+
+        //then
+        Optional<Lecture> lecture = lectureRepository.findById(lectureId);
+        if (lecture.isPresent()) {
+            List<Apply> apply = applyRepository.findByLectureAndEmployee_number(lecture.get(), applyRequestDto.getEmployee_number());
+            assertThat(result.getResponse().getContentAsString()).isEqualTo(apply.get(0).getId().toString());
+        }
+
+        System.out.println(result.getResponse().getContentAsString());
+    }
+
 }

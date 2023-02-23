@@ -25,10 +25,9 @@ public class ApplyService {
     @Transactional
     public Long apply(Long lectureId, ApplyRequestDto applyRequestDto) {
 
-        Lecture lecture = lectureRepository.findById(lectureId)
-                .orElseThrow(() -> new IllegalArgumentException("강의가 없습니다"));
+        Lecture lecture = findLectureById(lectureId);
 
-        List<Apply> applyAlreadyExists = applyRepository.findByLectureAndEmployee_number(lecture, applyRequestDto.getEmployee_number());
+        List<Apply> applyAlreadyExists = findApplyByLecIdAndEmpNum(lecture, applyRequestDto);
 
         if (!applyAlreadyExists.isEmpty()) {
             throw new DuplicateKeyException("이미 신청한 강의 입니다");
@@ -50,4 +49,32 @@ public class ApplyService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
+    public Long cancelApply(Long lectureId, ApplyRequestDto applyRequestDto) {
+        Lecture lecture = findLectureById(lectureId);
+
+        List<Apply> myAppllies = applyRepository.findByLectureAndEmployee_numberAndIs_validTrue(lecture, applyRequestDto.getEmployee_number());
+
+        if (myAppllies.isEmpty()) {
+            throw new DuplicateKeyException("기존 신청 내용이 없습니다");
+        }
+
+        Apply myApply = myAppllies.get(0);
+        myApply.cancel();
+
+        applyRepository.save(myApply);
+
+        return myApply.getId();
+    }
+
+
+    private Lecture findLectureById(Long lectureId) {
+
+        return lectureRepository.findById(lectureId)
+                .orElseThrow(() -> new IllegalArgumentException("강의가 없습니다"));
+    }
+
+    private List<Apply> findApplyByLecIdAndEmpNum(Lecture lecture, ApplyRequestDto applyRequestDto) {
+        return applyRepository.findByLectureAndEmployee_number(lecture, applyRequestDto.getEmployee_number());
+    }
 }

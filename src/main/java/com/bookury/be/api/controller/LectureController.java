@@ -36,4 +36,9 @@ public class LectureController {
     public List<LectureResponseDto> lecturesEmployeenumber(@RequestBody ApplyRequestDto requestDto) {
         return applyService.getApplyListByEmployeeNumber(requestDto);
     }
+
+    @PostMapping("/api/v1/lectures/{lectureId}/employeenumber/cancel")
+    public Long cancelLecture(@PathVariable Long lectureId, @RequestBody ApplyRequestDto requestDto) {
+        return applyService.cancelApply(lectureId, requestDto);
+    }
 }
