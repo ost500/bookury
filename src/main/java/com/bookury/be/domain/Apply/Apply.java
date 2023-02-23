@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
@@ -22,7 +23,8 @@ public class Apply {
 
     private String employee_number;
 
-    @Column(columnDefinition = "boolean default 1")
+    @Column(columnDefinition = "boolean default true")
+    @ColumnDefault("true")
     private boolean is_valid;
 
     @Builder
@@ -30,6 +32,7 @@ public class Apply {
         this.id = id;
         this.lecture = lecture;
         this.employee_number = employee_number;
+        this.is_valid = true;
     }
 
     @Override
