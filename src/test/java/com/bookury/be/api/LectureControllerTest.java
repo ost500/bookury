@@ -122,6 +122,25 @@ public class LectureControllerTest {
     }
 
     @Test
+    public void 강의_목록_전체() throws Exception {
+        // given
+        String url = "http://localhost:" + port + "/api/v1/lectures/all";
+
+        //when
+        MvcResult result = mvc.perform(get(url))
+                .andExpect(status().isOk()).andReturn();
+
+        //then
+        String content = result.getResponse().getContentAsString();
+
+        List<LectureResponseDto> lectureResponseDtoList = lectureService.allLectures();
+        String speaker = JsonPath.read(result.getResponse().getContentAsString(), "$.[0].speaker");
+        assertThat(lectureResponseDtoList.get(0).getSpeaker()).isEqualTo(speaker);
+
+        System.out.println(content);
+    }
+
+    @Test
     public void 강의_신청() throws Exception {
         // given
         Long lectureId = Long.valueOf(52);

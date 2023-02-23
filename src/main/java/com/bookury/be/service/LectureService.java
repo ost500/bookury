@@ -31,4 +31,12 @@ public class LectureService {
                 .map(LectureResponseDto::new)
                 .collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    public List<LectureResponseDto> allLectures() {
+        return lectureRepository.findAll()
+                .stream()
+                .map(LectureResponseDto::new)
+                .collect(Collectors.toList());
+    }
 }
