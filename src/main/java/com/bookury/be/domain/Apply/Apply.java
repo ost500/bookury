@@ -29,4 +29,13 @@ public class Apply {
         this.lecture = lecture;
         this.employee_number = employee_number;
     }
+
+    @Override
+    public String toString() {
+        return "Apply{" +
+                "id=" + id +
+                ", lecture=" + lecture +
+                ", employee_number='" + employee_number + '\'' +
+                '}';
+    }
 }

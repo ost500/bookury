@@ -31,4 +31,9 @@ public class LectureController {
     public Long ApplyLecture(@PathVariable Long lectureId, @RequestBody ApplyRequestDto requestDto) {
         return applyService.apply(lectureId, requestDto);
     }
+
+    @GetMapping("/api/v1/lectures/employeenumber")
+    public List<LectureResponseDto> lecturesEmployeenumber(@RequestBody ApplyRequestDto requestDto) {
+        return applyService.getApplyListByEmployeeNumber(requestDto);
+    }
 }

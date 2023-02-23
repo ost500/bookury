@@ -1,6 +1,7 @@
 package com.bookury.be.service;
 
 import com.bookury.be.api.dto.ApplyRequestDto;
+import com.bookury.be.api.dto.LectureResponseDto;
 import com.bookury.be.domain.Apply.Apply;
 import com.bookury.be.domain.Apply.ApplyRepository;
 import com.bookury.be.domain.Lecture.Lecture;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -38,6 +40,14 @@ public class ApplyService {
                 .build();
 
         return applyRepository.save(applyEntity).getId();
+    }
+
+    public List<LectureResponseDto> getApplyListByEmployeeNumber(ApplyRequestDto applyRequestDto) {
+        List<Apply> applies = applyRepository.findByEmployee_number(applyRequestDto.getEmployee_number());
+
+        return applies.stream()
+                .map(apply -> LectureResponseDto.builder().entity(apply.getLecture()).build())
+                .collect(Collectors.toList());
     }
 
 }
